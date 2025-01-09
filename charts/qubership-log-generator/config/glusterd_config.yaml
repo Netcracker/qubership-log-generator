@@ -1,0 +1,78 @@
+# Copyright 2024-2025 NetCracker Technology Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+config:
+  - name: "glusterd"
+    messagesPerSec: 1000
+    generationTime: 600
+    dateFormat: "[yyyy-MM-dd HH:mm:ss.SSSSSS]"
+    template: " ${letter} ${MSGID} [${source}] ${action}: ${message}"
+    fields:
+      letter:
+        - W
+        - I
+        - E
+      MSGID:
+        - "[MSGID: 106479]"
+        - "[MSGID: 1062379]"
+        - "[MSGID: 12179]"
+        - ""
+      source:
+        - "socket.c:1600:__socket_rwv"
+        - "rdma.c:4630:__gf_rdma_ctx_create"
+        - "glusterd-store.c:2241:glusterd_restore_op_version"
+        - "glusterd-store.c:2241:glusterd_restore_op_version"
+        - "event-epoll.c:613:event_dispatch_epoll_worker"
+      action:
+        - 0-management
+        - 0-pmap
+        - 0-glusterd
+        - 0-epoll
+      message:
+        - readv on 10.0.0.1:24007 failed (No data available)
+        - Peer <dr311qa-arbiter-node-right-1> (<522cd00d-8999-4e7d-a2bf-3967d7ff5c3d>), in state <Peer in Cluster>, has disconnected from glusterd.
+        - Maximum allowed open file descriptors set to 65536
+        - option 'address-family' is deprecated, preferred is 'transport.address-family', continuing with correction
+        - Starting glustershd service
+        - "Received ACC from uuid: a53c44d1-b573-4d19-a561-c668a3438d38"
+        - "Detected new install. Setting op-version to maximum : 31202"
+        - Using /var/run/gluster as pid file working directory
+        - Path corresponding to /var/lib/glusterd/glusterd.info. [No such file or directory]
+    multiline:
+      - template: "Final graph:\n
+          +------------------------------------------------------------------------------+\n
+          \  1: volume management\n
+          \  2:     type mgmt/glusterd\n
+          \  3:     option rpc-auth.auth-glusterfs on\n
+          \  4:     option rpc-auth.auth-unix on\n
+          \  5:     option rpc-auth.auth-null on\n
+          \  6:     option rpc-auth-allow-insecure on\n
+          \  7:     option transport.listen-backlog ${number}\n
+          \  8:     option event-threads ${number}\n
+          \  9:     option ping-timeout ${number}\n
+          \ 10:     option transport.socket.read-fail-log off\n
+          \ 11:     option transport.socket.keepalive-interval ${number}\n
+          \ 12:     option transport.socket.keepalive-time ${number}\n
+          \ 13:     option transport-type rdma\n
+          \ 14:     option working-directory /var/lib/glusterd\n
+          \ 15: end-volume\n
+          \ 16:  \n
+          +------------------------------------------------------------------------------+"
+        fields:
+          number:
+            - "2"
+            - "10"
+            - "34"
+            - "1"
+            - "0"

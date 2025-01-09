@@ -1,0 +1,106 @@
+# Copyright 2024-2025 NetCracker Technology Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+config:
+  - name: "go"
+    messagesPerSec: 1000
+    generationTime: 600
+    dateFormat: "[yyyy-MM-dd'T'HH:mm:ss,SSS'Z']"
+    template: "/go/pkg/mod/example.com/${package}:${line}: ${message}"
+    fields:
+      package:
+        - go-logr/zapr@v0.2.0/zapr.go
+        - local-app/lapp@v1.1.0/start.go
+        - qubership-rep/qubership@0.0.1/config.go
+      line:
+        - "32"
+        - "5"
+        - "19"
+        - "57"
+      message:
+        - Message successfully submitted
+        - Message successfully submitted with warnings
+        - Message successfully submitted to request url
+  - name: "go"
+    messagesPerSec: 1000
+    generationTime: 600
+    dateFormat: "[yyyy-MM-dd'T'HH:mm:ss,SSS'Z']"
+    template: "[${level}][caller=${class}.go][msg=\"${message}\"]"
+    fields:
+      class:
+        - tls_config
+        - node_exporter
+        - filesystem_common
+      level:
+        - info
+        - warn
+      message:
+        - Build context
+        - Parsed flag --collector.filesystem.fs-types-exclude
+        - Enabled collectors
+  - name: "go"
+    messagesPerSec: 1000
+    generationTime: 600
+    dateFormat: "[yyyy-MM-dd'T'HH:mm:ss,SSS'Z']"
+    template: "${level} ${dashboard} failed to request dashboard url, falling back to config map; if specified {\"error\": \"request failed with status 404\"}"
+    fields:
+      level:
+        - WARN
+        - ERROR
+      dashboard:
+        - qubership-dashboard
+        - qubership-node-exporter-dashboard
+        - qubership-kube-overview-dashborad
+    multiline:
+      - template: "qubership-repository.com/grafana-operator/grafana-operator/v4/controllers/grafanadashboard.(*${class}).${method}"
+        fields:
+          class:
+            - DashboardPipelineImpl
+            - GrafanaDashboardReconciler
+            - SetupWithManager
+          method:
+            - obtainJson
+            - ProcessDashboard
+            - reconcileDashboards
+            - Reconcile
+      - template: "/workspace/controllers/grafanadashboard/${class}.go:${line}"
+        fields:
+          class:
+            - dashboard_pipeline
+            - grafanadashboard_controller
+            - grafana_reconciler
+            - datasource_controller
+          line:
+            - "176"
+            - "108"
+            - "56"
+            - "37"
+  - name: "go"
+    messagesPerSec: 1000
+    generationTime: 600
+    dateFormat: "'I'0622 HH:mm:ss,SSSSSS"
+    template: "1 ${class}.go:645] (from=qubership-log-generator) Throttling request took 1.045883302s, request: GET:https://${address}:443/apis/qubership.org/${version}?timeout=32s"
+    fields:
+      class:
+        - warnings
+        - request
+      address:
+        - "10.0.0.1"
+        - "10.0.0.2"
+        - "10.0.0.3"
+        - "10.0.0.4"
+      version:
+        - v9
+        - v10
+        - v11

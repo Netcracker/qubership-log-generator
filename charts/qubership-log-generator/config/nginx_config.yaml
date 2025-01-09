@@ -1,0 +1,46 @@
+# Copyright 2024-2025 NetCracker Technology Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+config:
+  - name: "nginx"
+    messagesPerSec: 1000
+    generationTime: 600
+    dateFormat: "'I'0622 HH:mm:ss,SSSSSS"
+    template: "8 event.go:282] Event(v1.ObjectReference{Kind:\"Ingress\", Namespace:\"${namespace}\", Name:\"${service}\", UID:\"3b976065-9838-4a7e-912a-c5820a2b7e6a\", APIVersion:\"networking.k8s.io/v1beta1\", ResourceVersion:\"228573236\", FieldPath:\"\"}): type: 'Normal' reason: 'Sync' Scheduled for sync"
+    fields:
+      namespace:
+        - qubership-ns1
+        - qubership-ns2
+        - qubership-ns3
+        - qubership-ns4
+      service:
+        - qubership-airflow-manager
+        - qubership-ha-test
+        - qubership-prometheus-operator
+  - name: "nginx"
+    messagesPerSec: 1000
+    generationTime: 600
+    dateFormat: "'W'0622 HH:mm:ss,SSSSSS"
+    template: "8 controller.go:992] Service \"${namespace}/${service}\" does not have any active Endpoint."
+    fields:
+      namespace:
+        - qubership-ns1
+        - qubership-ns2
+        - qubership-ns3
+        - qubership-ns4
+      service:
+        - qubership-airflow-manager
+        - qubership-ha-test
+        - qubership-prometheus-operator
+        - qubership-opensearch
