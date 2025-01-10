@@ -26,7 +26,8 @@ COPY pom.xml pom.xml
 COPY mvnw mvnw
 COPY .mvn .mvn
 
-RUN ./mvnw clean package
+RUN chmod +x ./mvnw \
+    && ./mvnw clean package
 
 FROM openjdk:17-slim-buster
 
