@@ -1,0 +1,77 @@
+# Copyright 2024-2025 NetCracker Technology Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: qubership-log-generator
+    metrics: qubership-log-generator
+  name: qubership-log-generator
+spec:
+  replicas: {{ default 1 .Values.replicas }}
+  selector:
+    matchLabels:
+      metrics: qubership-log-generator
+  template:
+    metadata:
+      labels:
+        name: qubership-log-generator
+        metrics: qubership-log-generator
+    spec:
+      containers:
+        - name: qubership-log-generator
+          image: {{ .Values.image }}
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: {{ default "100m" .Values.resources.requests.cpu }}
+              memory: {{ default "256Mi" .Values.resources.requests.memory }}
+            limits:
+              cpu: {{ default "500m" .Values.resources.limits.cpu }}
+              memory: {{ default "512Mi" .Values.resources.limits.memory }}
+          ports:
+            - name: metrics
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: LOG_MESSAGES_PER_SECOND
+              value: {{ default "500" .Values.messagesPerSec | quote }}
+            - name: LOG_GENERATION_TIME
+              value: {{ default "600" .Values.generationTime | quote }}
+            - name: LOG_TEMPLATES
+              value: {{ join "," .Values.templates | quote }}
+{{- if .Values.multiline }}
+            - name: LOG_MESSAGES_MULTILINE
+              value: {{ default "false" .Values.multiline.enabled | quote }}
+  {{- if eq .Values.multiline.enabled true }}
+            - name: LOG_MULTILINE_PROBABILITY
+              value: {{ default "0.3" .Values.multiline.probability | quote }}
+  {{- end }}
+{{- else }}
+            - name: LOG_MESSAGES_MULTILINE
+              value: "false"
+{{- end }}
+          volumeMounts:
+            - mountPath: /opt/app/qubership-log-generator/etc
+              name: config
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: "qubership-log-generator-config"
+      {{- if .Values.securityContext }}
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 12 }}
+      {{- end }}

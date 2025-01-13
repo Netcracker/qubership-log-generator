@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!--
+ # Copyright 2024-2025 NetCracker Technology Corporation
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+ # you may not use this file except in compliance with the License.
+ # You may obtain a copy of the License at
+ #
+ #      http://www.apache.org/licenses/LICENSE-2.0
+ #
+ # Unless required by applicable law or agreed to in writing, software
+ # distributed under the License is distributed on an "AS IS" BASIS,
+ # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+
+-->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Entry Form</title>
+    <style>
+        textarea {
+            width: 100%;
+            height: auto;
+            min-height: 50px;
+            overflow: hidden;
+        }
+        #genTimeID {
+            display: none;
+        }
+        #msgPerSecID {
+            display: none;
+        }
+    </style>
+
+    <script>
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
+
+        function clearText() {
+            const textInput = document.getElementById('message');
+            textInput.value = '';
+            textInput.style.height = '50px'; // Reset to original size
+        }
+
+        function toggleFormInputs() {
+            var checkbox = document.getElementById("checkbox");
+            var numberInput1 = document.getElementById("messageNumberInput");
+            var genTime = document.getElementById("genTimeID");
+            var msgPerSec = document.getElementById("msgPerSecID");
+
+            if (checkbox.checked) {
+                genTime.style.display = "block";
+                msgPerSec.style.display = "block";
+                numberInput1.style.display = "none";
+            } else {
+                genTime.style.display = "none";
+                msgPerSec.style.display = "none";
+                numberInput1.style.display = "block";
+            }
+        }
+
+        function validateAndPostInput() {
+            var messageInput = document.getElementById("message").value;
+            var checkbox = document.getElementById("checkbox");
+            var jsonData;
+            if (messageInput.trim() === "") {
+                throw new Error("Message cannot be empty.");
+            }
+            const textInput = document.getElementById('message').value;
+
+            if(checkbox.checked){
+                const genTime = document.getElementById('genTime').value;
+                const msgPerSec = document.getElementById('msgPerSec').value;
+                jsonData = JSON.stringify({
+                    message: textInput,
+                    genTime: genTime,
+                    msgPerSec: msgPerSec
+                });}
+            else {
+                const numberOfRep = document.getElementById('numberInput').value;
+                if (numberOfRep > 2147483647) {
+                    event.preventDefault();
+                    alert('Exception: The number entered exceeds the maximum limit.');
+                }
+                jsonData = JSON.stringify({
+                    message: textInput,
+                    numberOfRep: numberOfRep
+                });
+            }
+
+            fetch('/editor/editLogs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData
+            });
+        }
+
+    </script>
+
+</head>
+
+<body>
+<form id="newPostForm" onsubmit="try { validateAndPostInput(); } catch (e) { alert(e.message); return false; }" >
+    <label for="message">Enter your text:</label>
+    <textarea id="message"  name="message" oninput="autoResize(this)"></textarea>
+
+    <label for="checkbox">Manually set the generation parameters:</label>
+    <input type="checkbox" id="checkbox" onclick="toggleFormInputs()"><br><br>
+
+    <div id="genTimeID">
+        <label for="genTime">genTime:</label>
+        <input type="number" id="genTime" name="genTime" value="600" min="1" max="2147483647"><br>
+    </div>
+
+    <div id="msgPerSecID">
+        <label for="msgPerSec">msgPerSec:</label>
+        <input type="number" id="msgPerSec" name="msgPerSec" value="1000" min="1" max="2147483647"><br><br>
+    </div>
+
+    <div id="messageNumberInput">
+        <label for="numberInput">How many times to print a log message:</label>
+        <input type="number" id="numberInput" name="numberInput" value="1" min="1" max="2147483647"><br><br>
+    </div>
+
+    <button type="button"
+            onclick="document.getElementById('genTime').value=''; document.getElementById('msgPerSec').value=''; document.getElementById('numberInput').value='1'; clearText()">
+        Clear
+    </button>
+    <input type="submit" value="Post"/>
+
+</form>
+</body>
+
+</html>
