@@ -96,7 +96,7 @@ public class ApplicationHttpServer {
 
         static byte[] getLogEditorPage() throws IOException {
             String content = new String(
-                    Files.readAllBytes(Paths.get("./static/customLogEditorPage.html"))
+                    Files.readAllBytes(Paths.get("./static/customLogEditorPage.html").toRealPath())
             );
             return content.getBytes();
         }
