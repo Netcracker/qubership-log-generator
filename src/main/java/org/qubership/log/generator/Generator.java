@@ -35,6 +35,7 @@ import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.micrometer.prometheus.PrometheusRenameFilter;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -277,7 +278,8 @@ public class Generator {
         config.setConfig(new ArrayList<>());
         for (String file : files) {
             InputStream inputStream = Files.newInputStream(Paths.get(path + file));
-            Yaml yaml = new Yaml(new Constructor(Config.class));
+            LoaderOptions loaderOptions = new LoaderOptions();
+            Yaml yaml = new Yaml(new Constructor(Config.class, loaderOptions));
             Config fileConfig = yaml.load(inputStream);
             if (fileConfig != null && fileConfig.getConfig() != null && fileConfig.getConfig().size() > 0) {
                 config.getConfig().addAll(fileConfig.getConfig());
