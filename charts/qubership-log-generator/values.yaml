@@ -13,6 +13,7 @@
 # limitations under the License.
 
 image: ghcr.io/netcracker/qubership-log-generator:main
+imagePullSecrets: []
 
 replicas: 1
 
