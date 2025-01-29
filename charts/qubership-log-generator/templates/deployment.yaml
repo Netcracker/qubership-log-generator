@@ -67,6 +67,10 @@ spec:
             - mountPath: /opt/app/qubership-log-generator/etc
               name: config
               readOnly: true
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: config
           configMap:
