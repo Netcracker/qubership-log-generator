@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: qubership-log-generator
-          image: {{ .Values.image }}
+          image: {{ template "log-generator.image" . }}
           imagePullPolicy: Always
           resources:
             requests:

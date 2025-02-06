@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-image: ghcr.io/netcracker/qubership-log-generator:main
+#image: ghcr.io/netcracker/qubership-log-generator:main
 imagePullSecrets: []
 
 replicas: 1
