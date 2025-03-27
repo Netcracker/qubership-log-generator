@@ -26,7 +26,7 @@ limitations under the License.
 
     <properties>
         <compiler.version>8</compiler.version>
-        <assembly.version>3.3.0</assembly.version>
+        <assembly.version>3.7.1</assembly.version>
         <snakeyaml.version>2.4</snakeyaml.version>
         <micrometer.version>1.9.0</micrometer.version>
     </properties>
