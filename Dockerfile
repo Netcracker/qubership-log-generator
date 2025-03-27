@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM openjdk:17-slim-buster AS build
+FROM openjdk:18-slim-buster AS build
 
 ENV JAVA_TOOL_OPTIONS="-Xms256m -Xmx512m" \
     LOG_MESSAGES_PER_SECOND=1000 \
@@ -29,7 +29,7 @@ COPY .mvn .mvn
 RUN chmod +x ./mvnw \
     && ./mvnw clean package
 
-FROM openjdk:17-slim-buster
+FROM openjdk:18-slim-buster
 
 RUN mkdir -p /opt/app/qubership-log-generator/etc
 RUN mkdir -p /opt/app/static
