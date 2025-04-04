@@ -138,5 +138,4 @@ public class WordLogProvider extends LogProvider  {
         ll.setMax(100);
         template.setLogLength(ll);
     }
-    
 }
