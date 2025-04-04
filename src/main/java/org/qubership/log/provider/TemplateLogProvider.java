@@ -19,7 +19,7 @@ package org.qubership.log.provider;
 
 import org.qubership.log.model.Template;
 import org.qubership.log.monitoring.MetricsCollector;
-import io.micrometer.prometheus.PrometheusMeterRegistry;
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

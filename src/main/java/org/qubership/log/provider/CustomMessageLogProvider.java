@@ -18,7 +18,7 @@
 package org.qubership.log.provider;
 
 import org.qubership.log.monitoring.MetricsCollector;
-import io.micrometer.prometheus.PrometheusMeterRegistry;
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.text.DateFormat;
