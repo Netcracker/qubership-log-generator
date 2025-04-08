@@ -28,7 +28,7 @@ import org.qubership.log.model.*;
 
 import org.qubership.log.model.Template;
 import org.qubership.log.monitoring.MetricsCollector;
-import io.micrometer.prometheus.PrometheusMeterRegistry;
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 
 
 public class WordLogProvider extends LogProvider  {
@@ -138,5 +138,4 @@ public class WordLogProvider extends LogProvider  {
         ll.setMax(100);
         template.setLogLength(ll);
     }
-    
 }
