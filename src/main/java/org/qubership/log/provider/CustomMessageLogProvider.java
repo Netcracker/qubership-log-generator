@@ -46,7 +46,7 @@ public class CustomMessageLogProvider extends LogProvider {
     }
 
     @Override
-    public String getFirstLineWithoutDate() {
+    public String getFirstLine() {
         return null;
     }
 
