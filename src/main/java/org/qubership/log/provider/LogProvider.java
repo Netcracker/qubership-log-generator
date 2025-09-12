@@ -51,9 +51,8 @@ public abstract class LogProvider {
         StringBuilder message = new StringBuilder();
         Integer linesCount = 1;
 
-        String date = dateFormat.format(new Date());
-        String firstLine = getFirstLineWithoutDate();
-        message.append(date).append(" ").append(firstLine);
+        String firstLine = getFirstLine();
+        message.append(firstLine);
 
         while (multiline && isEventHappen(multilineProbability)) {
             String secondLine = getSecondLine();
@@ -78,7 +77,7 @@ public abstract class LogProvider {
         metricsCollector.messageBytes.record(length);
     }
 
-    abstract public String getFirstLineWithoutDate();
+    abstract public String getFirstLine();
 
     abstract public String getSecondLine();
 

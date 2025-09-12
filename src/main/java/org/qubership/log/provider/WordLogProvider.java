@@ -55,7 +55,7 @@ public class WordLogProvider extends LogProvider  {
     }
 
     @Override
-    public String getFirstLineWithoutDate() {
+    public String getFirstLine() {
         return generateLogLine(new int[]{template.getWordLength().getFrom(), template.getWordLength().getTo()}, new int[]{template.getLogLength().getMin(), template.getLogLength().getMax()}, new int[]{template.getSymbolRange().getFrom(), template.getSymbolRange().getTo()});
     }
 

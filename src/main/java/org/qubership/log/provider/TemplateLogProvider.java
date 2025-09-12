@@ -52,7 +52,7 @@ public class TemplateLogProvider extends LogProvider {
             }
 
             Template mTemplate = template.getMultiline().get(currentMultilineIndex);
-            return fillTemplateWithValues(mTemplate);
+            return fillTemplateWithValues(mTemplate, dateFormat, false);
         }
         currentMultilineIndex = -1;
         return "";
@@ -106,6 +106,9 @@ public class TemplateLogProvider extends LogProvider {
         Matcher matcher = pattern.matcher(templateStr);
         while (matcher.find()) {
             String key = templateStr.substring(matcher.start() + 2, matcher.end() - 1);
+            if ("date".equals(key)) {
+                continue;
+            }
             if (!fieldMasks.containsKey(key) && !keysWithoutPossibleValues.contains(key)) {
                 if (!fields.containsKey(key)) {
                     keysWithoutPossibleValues.add(key);
@@ -124,16 +127,26 @@ public class TemplateLogProvider extends LogProvider {
     }
 
     @Override
-    public String getFirstLineWithoutDate() {
-        return fillTemplateWithValues(template);
+    public String getFirstLine() {
+        return fillTemplateWithValues(template, dateFormat, true);
     }
 
-    private static String fillTemplateWithValues(Template template) {
+    private static String fillTemplateWithValues(Template template, DateFormat dateFormat, boolean firstLine) {
         String message = template.getTemplate();
         Map<String, List<String>> fields = template.getFields();
+
         for (Map.Entry<String, String> maskEntry : template.getFieldMasks().entrySet()) {
+            if ("date".equals(maskEntry.getKey())) {
+                continue;
+            }
             List<String> values = fields.get(maskEntry.getKey());
             message = message.replaceAll(maskEntry.getValue(), values.get(randomGenerator.nextInt(values.size())));
+        }
+
+        if (message.contains("${date}")) {
+            message = message.replaceAll("\\$\\{date\\}", dateFormat.format(new java.util.Date()));
+        } else if (firstLine) {
+            message = dateFormat.format(new java.util.Date()) + " " + message;
         }
         return message;
     }
