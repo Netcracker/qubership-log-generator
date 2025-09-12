@@ -22,7 +22,7 @@ limitations under the License.
 
     <groupId>log-generator</groupId>
     <artifactId>qubership-log-generator</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2-SNAPSHOT</version>
 
     <properties>
         <compiler.version>8</compiler.version>
