@@ -41,7 +41,7 @@ public class CustomMessageLogProvider extends LogProvider {
 
     @Override
     public void next() {
-        System.out.println(message);
+        IO.println(message);
         fillMetrics(message, lines, 1);
     }
 
