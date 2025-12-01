@@ -39,11 +39,11 @@ RUN mkdir -p /opt/app/qubership-log-generator/etc \
 
 WORKDIR /opt/app
 
-COPY --from=build /target/qubership-log-generator.jar ./target/
+COPY --from=build /build/target/qubership-log-generator.jar ./
 
 COPY charts/qubership-log-generator/config/ ./qubership-log-generator/etc/
 COPY static/ ./static/
 
-CMD ["java", "-jar", "/opt/app/target/qubership-log-generator.jar"]
+CMD ["java", "-jar", "/opt/app/qubership-log-generator.jar"]
 
 EXPOSE 8080
