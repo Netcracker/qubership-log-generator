@@ -21,6 +21,8 @@ ENV JAVA_TOOL_OPTIONS="-Xms256m -Xmx512m" \
     LOG_MULTILINE_PROBABILITY=0.3 \
     LOG_TEMPLATES=java
 
+RUN mkdir -p /build
+WORKDIR /build
 COPY src src
 COPY pom.xml pom.xml
 COPY mvnw mvnw
@@ -31,9 +33,9 @@ RUN chmod +x ./mvnw \
 
 FROM openjdk:25-ea-25-slim-bookworm
 
-RUN mkdir -p /opt/app/qubership-log-generator/etc
-RUN mkdir -p /opt/app/static
-RUN mkdir -p /opt/app/target
+RUN mkdir -p /opt/app/qubership-log-generator/etc \
+    && mkdir -p /opt/app/static \
+    && mkdir -p /opt/app/target
 
 WORKDIR /opt/app
 
