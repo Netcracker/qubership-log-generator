@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM openjdk:18-slim-buster AS build
+FROM openjdk:25-ea-25-slim-bookworm AS build
 
 ENV JAVA_TOOL_OPTIONS="-Xms256m -Xmx512m" \
     LOG_MESSAGES_PER_SECOND=1000 \
@@ -21,6 +21,8 @@ ENV JAVA_TOOL_OPTIONS="-Xms256m -Xmx512m" \
     LOG_MULTILINE_PROBABILITY=0.3 \
     LOG_TEMPLATES=java
 
+RUN mkdir -p /build
+WORKDIR /build
 COPY src src
 COPY pom.xml pom.xml
 COPY mvnw mvnw
@@ -29,19 +31,19 @@ COPY .mvn .mvn
 RUN chmod +x ./mvnw \
     && ./mvnw clean package
 
-FROM openjdk:18-slim-buster
+FROM openjdk:25-ea-25-slim-bookworm
 
-RUN mkdir -p /opt/app/qubership-log-generator/etc
-RUN mkdir -p /opt/app/static
-RUN mkdir -p /opt/app/target
+RUN mkdir -p /opt/app/qubership-log-generator/etc \
+    && mkdir -p /opt/app/static \
+    && mkdir -p /opt/app/target
 
 WORKDIR /opt/app
 
-COPY --from=build /target/qubership-log-generator.jar ./target/
+COPY --from=build /build/target/qubership-log-generator.jar ./
 
 COPY charts/qubership-log-generator/config/ ./qubership-log-generator/etc/
 COPY static/ ./static/
 
-CMD ["java", "-jar", "/opt/app/target/qubership-log-generator.jar"]
+CMD ["java", "-jar", "/opt/app/qubership-log-generator.jar"]
 
 EXPOSE 8080

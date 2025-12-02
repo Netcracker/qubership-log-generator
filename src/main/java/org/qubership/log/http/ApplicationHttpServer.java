@@ -29,7 +29,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.stream.Collectors;
 
 public class ApplicationHttpServer {
@@ -47,7 +47,7 @@ public class ApplicationHttpServer {
                 }
             });
             new Thread(server::start).start();
-            System.out.println("Server started on port 8080");
+            IO.println("Server started on port 8080");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -96,7 +96,7 @@ public class ApplicationHttpServer {
 
         static byte[] getLogEditorPage() throws IOException {
             String content = new String(
-                    Files.readAllBytes(Paths.get("./static/customLogEditorPage.html").toRealPath())
+                    Files.readAllBytes(Path.of("./static/customLogEditorPage.html").toRealPath())
             );
             return content.getBytes();
         }

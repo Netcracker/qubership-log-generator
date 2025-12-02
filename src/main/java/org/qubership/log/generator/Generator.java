@@ -43,7 +43,6 @@ import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -62,7 +61,7 @@ public class Generator {
 
     static PrometheusMeterRegistry prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
 
-    public static void main(String[] args) throws InterruptedException, IOException {
+    void main() throws InterruptedException, IOException {
         ApplicationHttpServer.startHTTPServer(prometheusRegistry);
         String msgPerSec = System.getenv().get("LOG_MESSAGES_PER_SECOND");
         String getTime = System.getenv().get("LOG_GENERATION_TIME");
@@ -88,15 +87,15 @@ public class Generator {
             if (templateNames.size() < 1) {
                 throw new Exception();
             }
-        } catch (Exception e) {
+        } catch (Exception _) {
             throw new InterruptedException("LOG_TEMPLATES is empty or did not set. Please, fill the parameter.");
         }
 
-        System.out.println("Configs will search in directory " + configFilePath);
+        IO.println("Configs will search in directory " + configFilePath);
         Config config = getConfig(configFilePath);
-        System.out.println("List of found templates: " + config);
+        IO.println("List of found templates: " + config);
 
-        System.out.println("Template name for run which will search in config directory: " + templateNames);
+        IO.println("Template name for run which will search in config directory: " + templateNames);
         List<Template> templates = new ArrayList<>();
         for (Template template : config.getConfig()) {
             if (templateNames.contains(template.getName())) {
@@ -105,7 +104,7 @@ public class Generator {
         }
 
         if (templates.size() < 1) {
-            System.out.println("No templates found. Please, check that templates config exists" +
+            IO.println("No templates found. Please, check that templates config exists" +
                     "and parameter LOG_TEMPLATES contains template name.");
         }
 
@@ -155,7 +154,7 @@ public class Generator {
             CustomMessageLogProvider provider = initAndGetProvider(message);
             createLogThread(getValidValue(genTime, DEFAULT_GENERATION_TIME), getValidValue(msgPerSec, DEFAULT_MESSAGES_PER_SECOND), provider.getLines() > 1, provider);
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            IO.println(e.getMessage());
         }
     }
 
@@ -164,7 +163,7 @@ public class Generator {
         try {
             createLogThread(getValidValue(numberOfRep, DEFAULT_LOG_REPETITIONS_NUMBER), initAndGetProvider(message));
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            IO.println(e.getMessage());
         }
     }
 
@@ -201,7 +200,7 @@ public class Generator {
                 StringBuilder sb = new StringBuilder();
                 sb.append("---=============---\n");
                 sb.append(numberOfRep + " messages were added by " + result_time + "").append("\n");
-                System.out.println(sb);
+                IO.println(sb);
             }
         });
         logThread.start();
@@ -211,7 +210,7 @@ public class Generator {
         Thread logThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("LOG_MESSAGES_PER_SECOND = " + messagesPerSec + "\n" +
+                IO.println("LOG_MESSAGES_PER_SECOND = " + messagesPerSec + "\n" +
                         "LOG_GENERATION_TIME = " + time + "\n" +
                         "LOG_MESSAGES_MULTILINE = " + multiline);
 
@@ -237,7 +236,7 @@ public class Generator {
                     sb.append("---=============---\n");
                     sb.append(messagesPerSec + " messages were added by " + result_time + "").append("\n");
                     sb.append("waitFor1sec = " + waitFor1sec).append("\n");
-                    System.out.println(sb);
+                    IO.println(sb);
                 }
             }
         });
@@ -255,7 +254,7 @@ public class Generator {
 
     public static Set<String> listFilesUsingDirectoryStream(String dir) throws IOException {
         Set<String> fileList = new HashSet<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(dir))) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Path.of(dir))) {
             for (Path path : stream) {
                 if (!Files.isDirectory(path)) {
                     fileList.add(path.getFileName()
@@ -277,7 +276,7 @@ public class Generator {
         Config config = new Config();
         config.setConfig(new ArrayList<>());
         for (String file : files) {
-            InputStream inputStream = Files.newInputStream(Paths.get(path + file));
+            InputStream inputStream = Files.newInputStream(Path.of(path + file));
             LoaderOptions loaderOptions = new LoaderOptions();
             Yaml yaml = new Yaml(new Constructor(Config.class, loaderOptions));
             Config fileConfig = yaml.load(inputStream);

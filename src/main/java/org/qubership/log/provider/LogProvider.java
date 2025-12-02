@@ -59,7 +59,7 @@ public abstract class LogProvider {
             message.append("\n").append(secondLine);
             linesCount++;
         }
-        System.out.println(message);
+        IO.println(message);
         currentMultilineIndex = -1;
 
         fillMetrics(message, linesCount, 1);
