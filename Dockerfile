@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM openjdk:25-ea-25-slim-bookworm AS build
+FROM openjdk:27-ea-3-slim-bookworm AS build
 
 ENV JAVA_TOOL_OPTIONS="-Xms256m -Xmx512m" \
     LOG_MESSAGES_PER_SECOND=1000 \
@@ -31,7 +31,7 @@ COPY .mvn .mvn
 RUN chmod +x ./mvnw \
     && ./mvnw clean package
 
-FROM openjdk:25-ea-25-slim-bookworm
+FROM openjdk:27-ea-3-slim-bookworm
 
 RUN mkdir -p /opt/app/qubership-log-generator/etc \
     && mkdir -p /opt/app/static \
