@@ -4,14 +4,34 @@ updates:
   directory: "/"
   schedule:
     interval: "monthly"
+  commit-message:
+    prefix: chore
+    prefix-development: chore
+    include: scope
+  groups:
+    actions-deps:
+      patterns:
+        - "*"
 # Maven bot configurations
 - package-ecosystem: "maven"
   directory: "/"
   schedule:
     interval: "monthly"
   open-pull-requests-limit: 20
+  commit-message:
+    prefix: chore
+    prefix-development: chore
+    include: scope
 # Docker bot configurations
 - package-ecosystem: "docker"
   directory: "/"
   schedule:
     interval: "monthly"
+  commit-message:
+    prefix: chore
+    prefix-development: chore
+    include: scope
+  groups:
+    actions-deps:
+      patterns:
+        - "*"
