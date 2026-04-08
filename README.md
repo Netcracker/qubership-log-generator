@@ -1,4 +1,4 @@
-# qubership Log Generator
+# Qubership Log Generator
 
 * [Qubership Log Generator](#qubership-log-generator)
   * [Description](#description)
