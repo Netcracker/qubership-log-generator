@@ -7,13 +7,13 @@
   * [Configuration](#configuration)
   * [Deploy](#deploy)
   * [Template configuration](#template-configuration)
-  * [Useful links](#useful-links)
+  * [Metrics](#metrics)
 
 ## Description
 
 Qubership-log-generator is very useful internal tool when we want to generate high load by logs for execute performance tests.
 It allows you to debug logs and check logs processing by Logging Service.
-It allows generating logs by predefined templates (java, go, json logs) and configure your own pattern.
+It allows generating logs by predefined templates (Java, go, JSON, logs) and configure your own pattern.
 It can produce various multiline messages.
 qubership-log-generator provides simple UI for printing log of your format.
 It provides general application metrics and metrics of logs generation statistics.
@@ -26,7 +26,7 @@ It provides general application metrics and metrics of logs generation statistic
 * `./src/main/java/org/qubership/log/Generator.java` - application entrypoint, reads configuration and starting log generators in threads
 * `./src/main/java/org/qubership/log/http` - HTTP server entrypoint
 * `./src/main/java/org/qubership/log/model` - general structures
-* `./static` - static files like html page for UI
+* `./static` - static files like HTML page for UI
 
 ## Build
 
@@ -41,21 +41,21 @@ After job is successful you can find Docker image of qubership-log-generator in 
 
 ## Configuration
 
-The parameters of `values.yaml` with general parameters of application are described below. 
+The parameters of `values.yaml` with general parameters of application are described below.
 
 | Name                          | Description                                                                                                                                   | Type   | Default value                  |
 |-------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|--------|--------------------------------|
-| `image`                       | Docker image of qubership-log-generator.                                                                                                           | Str    |                                |
-| `replicas`                    | (**Optional**) The number of replicas of qubership-log-generator.                                                                                  | Int    | 1                              |
-| `monitoring.metricsEnabled`   | (**Optional**) Flag for enabling metrics collecting of qubership-log-generator.                                                                    | Bool   | true                           |
-| `monitoring.dashboardEnabled` | (**Optional**) Flag for enable deploy of Grafana dashboard for qubership-log-generator.                                                            | Bool   | true                           |
+| `image`                       | Docker image of qubership-log-generator.                                                                                                      | Str    |                                |
+| `replicas`                    | (**Optional**) The number of replicas of qubership-log-generator.                                                                             | Int    | 1                              |
+| `monitoring.metricsEnabled`   | (**Optional**) Flag for enabling metrics collecting of qubership-log-generator.                                                               | Bool   | true                           |
+| `monitoring.dashboardEnabled` | (**Optional**) Flag for enable deploy of Grafana dashboard for qubership-log-generator.                                                       | Bool   | true                           |
 | `messagesPerSec`              | (**Optional**) The number of messages per second. The value is used if the same parameter is not set in template configuration.               | Int    | 1000                           |
 | `generationTime`              | (**Optional**) The number of times generation logs will happen. The value is used if the same parameter is not set in template configuration. | Int    | 600                            |
 | `multiline.enabled`           | (**Optional**) Flag for generation second lines of log messages.                                                                              | Bool   | false                          |
 | `multiline.probability`       | (**Optional**) Probability of multiline log messages.                                                                                         | Float  | 0.3                            |
 | `templates`                   | The list of template names that will be applied.                                                                                              | Slice  |                                |
-| `customConfig`                | (**Optional**) Custom configuration of your own templates. [How to configure template.](#template-configuration)                              | Yaml   |                                |
-| `securityContext`             | (**Optional**) Allow to specify parametes of SecurityContext (like `runAsUser` or `fsGroup`) for run pod.                                     | Object | runAsUser: 2000, fsGroup: 2000 |
+| `customConfig`                | (**Optional**) Custom configuration of your own templates. [How to configure template.](#template-configuration)                              | YAML   |                                |
+| `securityContext`             | (**Optional**) Allow to specify parameters of SecurityContext (like `runAsUser` or `fsGroup`) for run pod.                                     | Object | runAsUser: 2000, fsGroup: 2000 |
 
 Note: One message is not equivalent of one line. One message can be multiline or one line.
 
@@ -129,36 +129,36 @@ customConfig:
 
 The parameters of templates are described as follows:
 
-| Name             | Description                                                                              | Type  | Default value             |
-|------------------|------------------------------------------------------------------------------------------|-------|---------------------------|
-| `name`           | Name of template that is used to be applied. Redundant for second line templates.        | Str   |                           |
-| `messagesPerSec` | (**Optional**) The number of messages per second for the template.                       | Int   | 1000                      |
-| `generationTime` | (**Optional**) The number of times generation logs will happen for the template.         | Int   | 600                       |
-| `dateFormat`     | (**Optional**) String for dateFormat of generating message.                              | Str   | "yyyy-MM-dd HH:mm:ss,SSS" |
-| `template`       | Pattern with variables specified.                                                        | Str   |                           |
-| `fields`         | The list of fields names and available values.                                           | Slice |                           |
-| `multiline`      | (**Optional**) Template for second lines of logs. It has the same structure as Template. | Slice |                           |
-| `symbolRange.from`         | Start range for unicode symbols                                           | Int |                0x0600           |
-| `symbolRange.to`         | End range for unicode symbols                                           | Int |                 0x06FF          |
-| `wordLength.from`         | Minimum number of characters in words                                         | Int |            5               |
-| `wordLength.to`         | maximum number of characters in words                                         | Int |              10             |
-| `logLength.min`         | Minimum Length of log line                                           | Int |         20                  |
-| `logLength.max`         | maximum Length of log line                                           | Int |            100               |
+| Name               | Description                                                                              | Type  | Default value             |
+|--------------------|------------------------------------------------------------------------------------------|-------|---------------------------|
+| `name`             | Name of template that is used to be applied. Redundant for second line templates.        | Str   |                           |
+| `messagesPerSec`   | (**Optional**) The number of messages per second for the template.                       | Int   | 1000                      |
+| `generationTime`   | (**Optional**) The number of times generation logs will happen for the template.         | Int   | 600                       |
+| `dateFormat`       | (**Optional**) String for dateFormat of generating message.                              | Str   | "yyyy-MM-dd HH:mm:ss,SSS" |
+| `template`         | Pattern with variables specified.                                                        | Str   |                           |
+| `fields`           | The list of fields names and available values.                                           | Slice |                           |
+| `multiline`        | (**Optional**) Template for second lines of logs. It has the same structure as Template. | Slice |                           |
+| `symbolRange.from` | Start range for Unicode symbols                                                          | Int   |          0x0600           |
+| `symbolRange.to`   | End range for Unicode symbols                                                            | Int   |           0x06FF          |
+| `wordLength.from`  | Minimum number of characters in words                                                    | Int   |           5               |
+| `wordLength.to`    | maximum number of characters in words                                                    | Int   |           10              |
+| `logLength.min`    | Minimum Length of log line                                                               | Int   |           20              |
+| `logLength.max`    | maximum Length of log line                                                               | Int   |           100             |
 
-Important: 
+Important:
 - Variables must be specified in `${ }` and can use `a-z_0-9` symbols.
 - If you set the same names for different templates all these templates will be applied.
-- For parsing `dateFormat` java.text.SimpleDateFormat is used. Be careful when you write pattern. 
+- For parsing `dateFormat` java.text.SimpleDateFormat is used. Be careful when you write pattern.
 
-## Custom log messages functionality 
+## Custom log messages functionality
 To add a custom log message to the log output, you can use the page `/customLogEditorPage`.
 The page contains a form with a window for entering the text of the log, as well as parameters for configuring the printing of the log message:
 
-| Name | Description    | Type    | Default value |
-|------|-----|-----|---------------|
-| `numberOfRep`   | (**Optional**)  How many times to print a log message | Int    | 1             |
-| `genTime`   | (**Optional**) The number of times generation logs will happen.  |Int     | 600           |
-| `msgPerSec`   | (**Optional**) The number of messages per second.   |Int     | 1000          |
+| Name          | Description                                                    | Type   | Default value |
+|---------------|----------------------------------------------------------------|--------|---------------|
+| `numberOfRep` | (**Optional**)  How many times to print a log message          | Int    | 1             |
+| `genTime`     | (**Optional**) The number of times generation logs will happen.|Int     | 600           |
+| `msgPerSec`   | (**Optional**) The number of messages per second.              |Int     | 1000          |
 
 When entering empty configuration parameter values, default parameters are applied. It is not possible to enter an empty log message.
 
@@ -187,7 +187,7 @@ Metrics related with generated messages:
 * flg_messages_bytes_count - (counter) Bytes by log messages by template names
 * flg_messages_count_messages_total - (counter) Count of generated log messages by template names
 
-General metrics JVM, Garbage Collector and other java metrics:
+General metrics JVM, Garbage Collector and other Java metrics:
 
 ```prometheus
 # HELP flg_messages_lines_count Count of lines in log messages
