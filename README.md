@@ -55,7 +55,7 @@ The parameters of `values.yaml` with general parameters of application are descr
 | `multiline.probability`       | (**Optional**) Probability of multiline log messages.                                                                                         | Float  | 0.3                            |
 | `templates`                   | The list of template names that will be applied.                                                                                              | Slice  |                                |
 | `customConfig`                | (**Optional**) Custom configuration of your own templates. [How to configure template.](#template-configuration)                              | YAML   |                                |
-| `securityContext`             | (**Optional**) Allow to specify parameters of SecurityContext (like `runAsUser` or `fsGroup`) for run pod.                                     | Object | runAsUser: 2000, fsGroup: 2000 |
+| `securityContext`             | (**Optional**) Allow to specify parameters of SecurityContext (like `runAsUser` or `fsGroup`) for run pod.                                    | Object | runAsUser: 2000, fsGroup: 2000 |
 
 Note: One message is not equivalent of one line. One message can be multiline or one line.
 
