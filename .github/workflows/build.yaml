@@ -94,8 +94,7 @@ jobs:
         export LOG_CONFIG_FILES_PATH="${GITHUB_WORKSPACE}/charts/qubership-log-generator/config/"
         java -jar target/qubership-log-generator.jar &
         pid=$!
-        cleanup() { kill "$pid" 2>/dev/null || true; }
-        trap cleanup EXIT
+        trap 'kill "$pid" 2>/dev/null || true' EXIT
         for _ in $(seq 1 30); do
           if curl -fsS http://127.0.0.1:8080/metrics >/dev/null; then
             curl -fsS http://127.0.0.1:8080/metrics | grep -q .
