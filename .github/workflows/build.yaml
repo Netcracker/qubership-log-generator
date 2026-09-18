@@ -82,7 +82,9 @@ jobs:
         distribution: temurin
         java-version: '25'
     - name: Package application
-      run: ./mvnw -B -ntp package
+      run: |
+        chmod +x ./mvnw
+        ./mvnw -B -ntp package
     - name: Smoke the packaged jar
       run: |
         set -euo pipefail
