@@ -50,6 +50,7 @@ jobs:
             - '.mvn/**'
             - 'src/**'
             - 'charts/qubership-log-generator/config/**'
+            - '.github/workflows/build.yaml'
           docker:
             - 'Dockerfile'
             - 'pom.xml'
@@ -97,7 +98,7 @@ jobs:
         trap 'kill "$pid" 2>/dev/null || true' EXIT
         for _ in $(seq 1 30); do
           if curl -fsS http://127.0.0.1:8080/metrics >/dev/null; then
-            curl -fsS http://127.0.0.1:8080/metrics | grep -q .
+            curl -fsS http://127.0.0.1:8080/metrics | grep . >/dev/null
             exit 0
           fi
           sleep 1
